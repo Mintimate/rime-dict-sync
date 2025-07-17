@@ -1,5 +1,5 @@
 # 帮助文档地址: https://docs.cnb.cool/zh/vscode/quick-start.html
-FROM golang:1.22.3
+FROM golang:1.24.5
 
 # 腾讯云软件源使用示例: https://cnb.cool/examples/mirrors/mirrors.cloud.tencent.com
 
