@@ -1,0 +1,11 @@
+# 下载的词库，保存名称-下载地址
+DOWNLOAD_DIR: "dl_dicts"
+TARGET_DICT:
+  - name: "rime_mint.base.dict.yaml"
+    url: "https://raw.githubusercontent.com/amzxyz/rime_wanxiang/refs/heads/wanxiang/zh_dicts/base.dict.yaml"
+  - name: "rime_mint.chars.dict.yaml"
+    url: "https://raw.githubusercontent.com/amzxyz/rime_wanxiang/refs/heads/wanxiang/zh_dicts/chars.dict.yaml"
+  - name: "rime_mint.correlation.dict.yaml"
+    url: "https://raw.githubusercontent.com/amzxyz/rime_wanxiang/refs/heads/wanxiang/zh_dicts/correlation.dict.yaml"
+  - name: "rime_mint.ext.dict.yaml"
+    url: "https://raw.githubusercontent.com/amzxyz/rime_wanxiang/refs/heads/wanxiang/zh_dicts/suggestion.dict.yaml"
