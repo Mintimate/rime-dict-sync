@@ -1,0 +1,12 @@
+$:
+  vscode:
+    - runner:
+        cpus: 4
+      docker:
+        build: .ide/Dockerfile
+      services:
+        - vscode
+        - docker
+      stages:
+        - name: 初始化完成
+          script: echo "初始化完成"
