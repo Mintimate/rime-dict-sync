@@ -59,3 +59,7 @@ TARGET_DICT:
 ```
 
 下载的字典文件将保存在 `dl_dicts` 目录中，可以直接用于 Rime 输入法。
+
+## 许可证
+
+本项目使用 MIT 许可证。详情请查看 [LICENSE](./LICENSE) 文件。

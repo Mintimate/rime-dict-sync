@@ -59,3 +59,7 @@ After running the program:
 ```
 
 Downloaded dictionary files are saved in `dl_dicts` directory and ready for use with Rime input method.
+
+## LICENSE
+
+This project is licensed under the MIT License. For details, please see the [LICENSE](./LICENSE) file.
