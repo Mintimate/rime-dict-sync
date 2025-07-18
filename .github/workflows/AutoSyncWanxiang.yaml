@@ -1,0 +1,45 @@
+name: 自动更新雾凇拼音词典到薄荷输入法
+
+# 定时和 main 推送触发
+
+on:
+  push:
+    branches:
+      - main
+  schedule:
+    - cron: "0 18 17 * *"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    if: github.repository_owner == 'Mintimate'
+
+    steps:
+      - name: 检录本仓库
+        uses: actions/checkout@v2
+
+      - name: 设置环境变量
+        uses: actions/setup-go@v5
+        with:
+          go-version: '^1.24.5'
+
+      - name: 安装Go依赖并运行
+        run: |
+          go mod tidy
+          go run .
+
+      - name: 更新薄荷拼音目录
+        run: |
+          git clone https://github.com/Mintimate/oh-my-rime.git
+          cp dl_dicts/* oh-my-rime/dicts/
+          cd oh-my-rime
+          
+      - name: Commit & Push changes
+        uses: actions-js/push@master
+        with:
+          github_token: ${{ secrets.ACCESSTOKENFORACTION }}
+          repository: Mintimate/oh-my-rime
+          coauthor_name: amzxyz
+          coauthor_email: 129564993+amzxyz@users.noreply.github.com
+          directory: oh-my-rime/dicts
+          message: "AutoUpdate WanXiang Dicts"
