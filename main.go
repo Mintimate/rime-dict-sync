@@ -1,8 +1,18 @@
 package main
 
+import (
+	"flag"
+)
+
 func main() {
+	// 定义命令行参数
+	var configPath string
+	flag.StringVar(&configPath, "c", "config.yaml", "配置文件路径")
+	flag.StringVar(&configPath, "config", "config.yaml", "配置文件路径")
+	flag.Parse()
+
 	// 加载配置
-	config, err := loadConfig("config.yaml")
+	config, err := loadConfig(configPath)
 	if err != nil {
 		panic(err)
 	}
