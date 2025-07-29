@@ -11,11 +11,25 @@ $:
         - name: 初始化完成
           script: echo "初始化完成"
 
+.common_sync: &common_sync
+  docker:
+    build: .ide/Dockerfile
+  imports:
+    - https://cnb.cool/Mintimate/secret/-/blob/main/SyncToGitHub.yml
+
+.common_git_steps: &common_git_steps
+  name: 自动同步代码
+  script:
+    - git clone https://${GIT_PUBLIC_ACCESS_TOKEN}@github.com/Mintimate/oh-my-rime.git
+    - cd oh-my-rime
+    - git config user.name "github-actions"
+    - git config user.email "github-actions[bot]@users.noreply.github.com"
+    - cd ../
+
 main:
   push:
     - name: "推送镜像"
-      imports:
-        - https://cnb.cool/Mintimate/secret/-/blob/main/SyncToGitHub.yml
+      <<: *common_sync
       stages:
         - name: 自动同步代码
           image: tencentcom/git-sync
@@ -26,47 +40,35 @@ main:
             password: ${GIT_ACCESS_TOKEN}
             branch: main
             force: true
-  "crontab: 0 0 29 * *":
+  "crontab: 15 10 29 * *":
     - name: "定时同步万象"
-      docker:
-        build: .ide/Dockerfile
-      imports:
-        - https://cnb.cool/Mintimate/secret/-/blob/main/SyncToGitHub.yml
+      <<: *common_sync
       stages:
         - name: 自动同步词库
           script: 
             - go mod tidy
             - go build .
             - bash syncWanxiang.sh
-        - name: 自动同步代码
+        - <<: *common_git_steps
+        - name: 推送代码
           script:
-            - git clone https://${GIT_PUBLIC_ACCESS_TOKEN}@github.com/Mintimate/oh-my-rime.git
             - cp dl_dicts/* oh-my-rime/dicts/
-            - cd oh-my-rime
-            - git config user.name "github-actions"
-            - git config user.email "github-actions[bot]@users.noreply.github.com"
-            - git add .
-            - 'git commit -m "AutoUpdate Wanxiang pinyin Dicts" -m "" -m "Co-authored-by: 129564993+amzxyz@users.noreply.github.com"'
+            - cd oh-my-rime && git add .
+            - 'git commit -m "AutoUpdate Wanxiang pinyin Dicts" -m "" -m "Co-authored-by: amzxyz <129564993+amzxyz@users.noreply.github.com>"'
             - git push
-  "crontab: 0 12 29 * *":
+  "crontab: 0 15 5 * *":
     - name: "定时同步拆字"
-      docker:
-        build: .ide/Dockerfile
-      imports:
-        - https://cnb.cool/Mintimate/secret/-/blob/main/SyncToGitHub.yml
+      <<: *common_sync
       stages:
         - name: 自动同步词库
           script: 
             - go mod tidy
             - go build .
             - bash syncRadical.sh
-        - name: 自动同步代码
+        - <<: *common_git_steps
+        - name: 推送代码
           script:
-            - git clone https://${GIT_PUBLIC_ACCESS_TOKEN}@github.com/Mintimate/oh-my-rime.git
             - cp dl_dicts/* oh-my-rime/
-            - cd oh-my-rime
-            - git config user.name "github-actions"
-            - git config user.email "github-actions[bot]@users.noreply.github.com"
-            - git add .
+            - cd oh-my-rime && git add .
             - 'git commit -m "AutoUpdate Radical pinyin Dicts" -m "" -m "Co-authored-by: mirtlecn <76689045+mirtlecn@users.noreply.github.com>"'
             - git push
