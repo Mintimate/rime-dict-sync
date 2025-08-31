@@ -48,7 +48,13 @@ main:
           script: 
             - go mod tidy
             - go build .
-            - bash syncWanxiang.sh
+            - |
+              if bash syncWanxiang.sh; then
+                echo "检测到词库变化，需要更新"
+              else
+                echo "词库无变化，跳过更新"
+                exit 0
+              fi
         - <<: *common_git_steps
         - name: 推送代码
           script:
@@ -64,7 +70,13 @@ main:
           script: 
             - go mod tidy
             - go build .
-            - bash syncRadical.sh
+            - |
+              if bash syncRadical.sh; then
+                echo "检测到词库变化，需要更新"
+              else
+                echo "词库无变化，跳过更新"
+                exit 0
+              fi
         - <<: *common_git_steps
         - name: 推送代码
           script:
