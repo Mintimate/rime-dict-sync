@@ -11,6 +11,7 @@ type DictConfig struct {
 		URL  string `yaml:"url"`
 	} `yaml:"TARGET_DICT"`
 	DOWNLOAD_DIR string `yaml:"DOWNLOAD_DIR"`
+	REMOTE_REPO  string `yaml:"REMOTE_REPO"`
 }
 
 func loadConfig(path string) (*DictConfig, error) {
