@@ -7,10 +7,11 @@ GO_MAIN="./rime-dict-sync"
 CONFIG_FILE_CONTENT='''
 # 下载的词库，保存名称-下载地址
 DOWNLOAD_DIR: "dl_dicts"
-REMOTE_REPO: "https://github.com/Mintimate/oh-my-rime.git"
 TARGET_DICT:
   - name: "radical_pinyin.dict.yaml"
     url: "https://github.com/mirtlecn/rime-radical-pinyin/raw/master/radical_pinyin.dict.yaml"
+    remote_repo: "https://github.com/Mintimate/oh-my-rime.git"
+    remote_path: "radical_pinyin.dict.yaml"
 '''
 
 # 保存config.yaml的路径

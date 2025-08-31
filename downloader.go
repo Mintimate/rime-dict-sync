@@ -76,8 +76,10 @@ func modifyDictContent(content []byte, dictName string) ([]byte, error) {
 }
 
 func downloadAndModify(dict struct {
-	Name string `yaml:"name"`
-	URL  string `yaml:"url"`
+	Name       string `yaml:"name"`
+	URL        string `yaml:"url"`
+	RemoteRepo string `yaml:"remote_repo,omitempty"`
+	RemotePath string `yaml:"remote_path,omitempty"`
 }, downloadDir string) error {
 	// 下载文件
 	content, err := downloadDict(dict.URL)

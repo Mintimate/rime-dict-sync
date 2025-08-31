@@ -54,10 +54,31 @@ func compareFileContent(localPath, remotePath string) (bool, error) {
 }
 
 // 检查是否有任何文件发生变化
-func hasAnyChanges(config *DictConfig, downloadDir, remoteRepoDir string) (bool, error) {
+func hasAnyChanges(config *DictConfig, downloadDir string, remoteRepoDirs map[string]string) (bool, error) {
 	for _, dict := range config.TARGET_DICT {
 		localPath := downloadDir + "/" + dict.Name
-		remotePath := remoteRepoDir + "/dicts/" + dict.Name
+		
+		// 确定远程仓库目录和文件路径
+		var remoteRepoDir string
+		var remotePath string
+		
+		if dict.RemoteRepo != "" {
+			// 使用字典特定的远程仓库
+			remoteRepoDir = remoteRepoDirs[dict.RemoteRepo]
+			if dict.RemotePath != "" {
+				remotePath = remoteRepoDir + "/" + dict.RemotePath
+			} else {
+				remotePath = remoteRepoDir + "/" + dict.Name
+			}
+		} else if config.REMOTE_REPO != "" {
+			// 使用全局远程仓库
+			remoteRepoDir = remoteRepoDirs[config.REMOTE_REPO]
+			remotePath = remoteRepoDir + "/dicts/" + dict.Name
+		} else {
+			// 没有配置远程仓库，跳过比较
+			println("跳过比较:", dict.Name, "(未配置远程仓库)")
+			continue
+		}
 		
 		isSame, err := compareFileContent(localPath, remotePath)
 		if err != nil {

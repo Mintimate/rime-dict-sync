@@ -1,7 +1,9 @@
 package main
 
 import (
+	"crypto/md5"
 	"flag"
+	"fmt"
 	"os"
 	"os/exec"
 )
@@ -33,21 +35,40 @@ func main() {
 		}
 	}
 
-	// 如果配置了远程仓库，则进行比较
+	// 收集所有需要的远程仓库
+	remoteRepos := make(map[string]bool)
+	
+	// 添加全局远程仓库
 	if config.REMOTE_REPO != "" {
+		remoteRepos[config.REMOTE_REPO] = true
+	}
+	
+	// 添加字典特定的远程仓库
+	for _, dict := range config.TARGET_DICT {
+		if dict.RemoteRepo != "" {
+			remoteRepos[dict.RemoteRepo] = true
+		}
+	}
+
+	// 如果有远程仓库配置，则进行比较
+	if len(remoteRepos) > 0 {
 		println("正在检查文件变化...")
 		
-		// 克隆远程仓库到临时目录
-		remoteRepoDir := "temp_remote_repo"
-		if err := cloneRemoteRepo(config.REMOTE_REPO, remoteRepoDir); err != nil {
-			println("警告: 无法克隆远程仓库，默认进行更新:", err.Error())
-			println("检测到文件变化，需要更新")
-			return
+		// 克隆所有需要的远程仓库
+		remoteRepoDirs := make(map[string]string)
+		for repoURL := range remoteRepos {
+			repoDir := "temp_remote_repo_" + generateRepoId(repoURL)
+			if err := cloneRemoteRepo(repoURL, repoDir); err != nil {
+				println("警告: 无法克隆远程仓库", repoURL, "，默认进行更新:", err.Error())
+				println("检测到文件变化，需要更新")
+				return
+			}
+			remoteRepoDirs[repoURL] = repoDir
+			defer os.RemoveAll(repoDir) // 清理临时目录
 		}
-		defer os.RemoveAll(remoteRepoDir) // 清理临时目录
 
 		// 检查是否有变化
-		hasChanges, err := hasAnyChanges(config, downloadDir, remoteRepoDir)
+		hasChanges, err := hasAnyChanges(config, downloadDir, remoteRepoDirs)
 		if err != nil {
 			panic(err)
 		}
@@ -59,6 +80,12 @@ func main() {
 
 		println("检测到文件变化，需要更新")
 	}
+}
+
+// 生成仓库URL的唯一标识符
+func generateRepoId(repoURL string) string {
+	hash := md5.Sum([]byte(repoURL))
+	return fmt.Sprintf("%x", hash)[:8]
 }
 
 // 克隆远程仓库
