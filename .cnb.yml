@@ -75,7 +75,7 @@ main:
                 echo "检测到词库变化，需要更新"
               else
                 echo "词库无变化，跳过更新"
-                exit 0
+                exit 78
               fi
         - <<: *common_git_steps
         - name: 推送代码
