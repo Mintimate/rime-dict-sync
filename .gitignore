@@ -1,0 +1,5 @@
+# 程序的默认词库工作空间
+dl_dicts/
+
+# 临时克隆空间
+temp_remote_repo_*
