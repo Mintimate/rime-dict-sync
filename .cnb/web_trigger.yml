@@ -4,6 +4,7 @@ branch:
     # 同步词库到薄荷
     - name: 同步万象词库到薄荷
       event: web_trigger_sync
+      isDefault: true
       inputs:
         # 同步shell选项
         sync_shell:
