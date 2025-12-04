@@ -102,7 +102,7 @@ main:
         - <<: *common_git_steps
         - name: 推送代码
           script:
-            - cp dl_dicts/* oh-my-rime/dicts/
+            - cp dl_dicts/* oh-my-rime/${update_target}
             - cd oh-my-rime && git add .
             - 'git commit -m "AutoUpdate Dicts" -m "" -m "${co_authors}"'
             - git push

@@ -26,3 +26,14 @@ branch:
               value: "Co-authored-by: amzxyz <129564993+amzxyz@users.noreply.github.com>"
             - name: mirtlecn
               value: "Co-authored-by: mirtlecn <76689045+mirtlecn@users.noreply.github.com>"
+        # 更新目标地址
+        update_target:
+          name: 更新目标地址
+          required: true
+          type: radio
+          default: dicts/
+          options:
+            - name: 更新到 dicts 目录
+              value: dicts/
+            - name: 更新到项目根目录
+              value: /
