@@ -104,5 +104,5 @@ main:
           script:
             - cp dl_dicts/* oh-my-rime/
             - cd oh-my-rime && git add .
-            - 'git commit -m "AutoUpdate Radical pinyin Dicts" -m "" -m "${co_authors}"'
+            - 'git commit -m "AutoUpdate Dicts" -m "" -m "${co_authors}"'
             - git push

@@ -12,9 +12,9 @@ branch:
           type: select
           options:
             - name: 同步万象词库
-              value: bash syncWanxiang.sh
+              value: syncWanxiang.sh
             - name: 同步拆字词库
-              value: bash syncRadical.sh
+              value: syncRadical.sh
         # 项目合作者
         co_authors:
           name: 项目合作者
