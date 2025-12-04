@@ -1,0 +1,27 @@
+branch:
+    # 在所有分支显示同步按钮
+  - buttons:
+    # 同步词库到薄荷
+    - name: 同步万象词库到薄荷
+      event: web_trigger_sync
+      inputs:
+        # 同步shell选项
+        sync_shell:
+          name: 执行同步配方
+          required: true
+          type: select
+          options:
+            - name: 同步万象词库
+              value: bash syncWanxiang.sh
+            - name: 同步拆字词库
+              value: bash syncRadical.sh
+        # 项目合作者
+        co_authors:
+          name: 项目合作者
+          required: true
+          type: select
+          options:
+            - name: amzxyz
+              value: "Co-authored-by: amzxyz <129564993+amzxyz@users.noreply.github.com>"
+            - name: mirtlecn
+              value: "Co-authored-by: mirtlecn <76689045+mirtlecn@users.noreply.github.com>"
