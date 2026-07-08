@@ -166,7 +166,7 @@ main:
           script:
             - cp dl_dicts/* oh-my-rime/dicts/
             - cd oh-my-rime && git add .
-            - 'git commit -m "AutoUpdate Rime Ice English Dicts" -m "" -m "Co-authored-by: iDvel <1469815+iDvel@users.noreply.github.com>"'
+            - 'git commit -m "AutoUpdate Rime Ice English Dicts"'
             - git push
   web_trigger_sync:
     - name: "web_trigger_sync"
