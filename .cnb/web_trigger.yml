@@ -19,11 +19,11 @@ branch:
           type: select
           options:
             - name: 同步万象词库
-              value: syncWanxiang.sh
+              value: scripts/sync-config.sh configs/wanxiang.yaml
             - name: 同步拆字词库
-              value: syncRadical.sh
+              value: scripts/sync-config.sh configs/radical.yaml
             - name: 同步雾凇英文词库
-              value: syncRimeIceEnglish.sh
+              value: scripts/sync-rime-ice-english.sh
         # 项目合作者
         co_authors:
           name: 项目合作者

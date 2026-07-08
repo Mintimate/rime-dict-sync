@@ -18,16 +18,17 @@
    git clone https://cnb.cool/Mintimate/rime/rime-dict-sync.git
    cd rime-dict-sync
    ```
-3. 创建配置文件 `config.yaml`（参考下方配置说明）
+3. 使用 `configs/` 中的任务配置，或按配置说明新增 YAML
 4. 运行程序：
    ```bash
    go mod tidy
-   go run .
+   go build .
+   bash scripts/sync-config.sh configs/wanxiang.yaml
    ```
 
 ## 配置文件说明
 
-创建 `config.yaml` 文件，格式如下：
+普通 `.dict.yaml` 词库使用 `configs/*.yaml` 配置，格式如下：
 
 ```yaml
 # 下载的词库，保存名称-下载地址
@@ -59,6 +60,12 @@ TARGET_DICT:
 ```
 
 下载的字典文件将保存在 `dl_dicts` 目录中，可以直接用于 Rime 输入法。
+
+需要保留目标仓库头部注释、只同步正文的特殊词库，可以使用专门脚本，例如：
+
+```bash
+bash scripts/sync-rime-ice-english.sh
+```
 
 ## 许可证
 

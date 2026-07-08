@@ -49,7 +49,7 @@ main:
             - go mod tidy
             - go build .
             - |
-              if bash syncWanxiang.sh; then
+              if bash scripts/sync-config.sh configs/wanxiang.yaml; then
                 echo "检测到词库变化，需要更新"
               else
                 echo "词库无变化，跳过更新"
@@ -71,7 +71,7 @@ main:
             - go mod tidy
             - go build .
             - |
-              if bash syncRadical.sh; then
+              if bash scripts/sync-config.sh configs/radical.yaml; then
                 echo "检测到词库变化，需要更新"
               else
                 echo "词库无变化，跳过更新"
@@ -91,7 +91,7 @@ main:
         - name: 自动同步词库
           script:
             - |
-              if bash syncRimeIceEnglish.sh; then
+              if bash scripts/sync-rime-ice-english.sh; then
                 echo "检测到词库变化，需要更新"
               else
                 echo "词库无变化，跳过更新"
@@ -113,7 +113,7 @@ main:
             - go mod tidy
             - go build .
             - |
-              if bash syncWanxiang.sh; then
+              if bash scripts/sync-config.sh configs/wanxiang.yaml; then
                 echo "检测到词库变化，需要更新"
               else
                 echo "词库无变化，跳过更新"
@@ -135,7 +135,7 @@ main:
             - go mod tidy
             - go build .
             - |
-              if bash syncRadical.sh; then
+              if bash scripts/sync-config.sh configs/radical.yaml; then
                 echo "检测到词库变化，需要更新"
               else
                 echo "词库无变化，跳过更新"
@@ -155,7 +155,7 @@ main:
         - name: 自动同步词库
           script:
             - |
-              if bash syncRimeIceEnglish.sh; then
+              if bash scripts/sync-rime-ice-english.sh; then
                 echo "检测到词库变化，需要更新"
               else
                 echo "词库无变化，跳过更新"
