@@ -61,10 +61,10 @@ TARGET_DICT:
 
 下载的字典文件将保存在 `dl_dicts` 目录中，可以直接用于 Rime 输入法。
 
-需要保留目标仓库头部注释、只同步正文的特殊词库，可以使用专门脚本，例如：
+需要保留目标仓库头部注释、只同步正文的特殊词库，可以使用 `merge_mode: "keep_remote_header"`，例如：
 
 ```bash
-bash scripts/sync-rime-ice-english.sh
+bash scripts/sync-config.sh configs/rime-ice-english.yaml
 ```
 
 ## 许可证

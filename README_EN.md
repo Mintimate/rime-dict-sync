@@ -61,10 +61,10 @@ After running the program:
 
 Downloaded dictionary files are saved in `dl_dicts` directory and ready for use with Rime input method.
 
-Special dictionaries that need to keep the target repository header and only sync body content can use dedicated scripts, for example:
+Special dictionaries that need to keep the target repository header and only sync body content can use `merge_mode: "keep_remote_header"`, for example:
 
 ```bash
-bash scripts/sync-rime-ice-english.sh
+bash scripts/sync-config.sh configs/rime-ice-english.yaml
 ```
 
 ## LICENSE

@@ -5,15 +5,18 @@ import (
 	"os"
 )
 
+type DictTarget struct {
+	Name       string `yaml:"name"`
+	URL        string `yaml:"url"`
+	RemoteRepo string `yaml:"remote_repo,omitempty"`
+	RemotePath string `yaml:"remote_path,omitempty"`
+	MergeMode  string `yaml:"merge_mode,omitempty"`
+}
+
 type DictConfig struct {
-	TARGET_DICT []struct {
-		Name       string `yaml:"name"`
-		URL        string `yaml:"url"`
-		RemoteRepo string `yaml:"remote_repo,omitempty"`
-		RemotePath string `yaml:"remote_path,omitempty"`
-	} `yaml:"TARGET_DICT"`
-	DOWNLOAD_DIR string `yaml:"DOWNLOAD_DIR"`
-	REMOTE_REPO  string `yaml:"REMOTE_REPO,omitempty"`
+	TARGET_DICT  []DictTarget `yaml:"TARGET_DICT"`
+	DOWNLOAD_DIR string       `yaml:"DOWNLOAD_DIR"`
+	REMOTE_REPO  string       `yaml:"REMOTE_REPO,omitempty"`
 }
 
 func loadConfig(path string) (*DictConfig, error) {

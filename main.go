@@ -27,14 +27,6 @@ func main() {
 		downloadDir = config.DOWNLOAD_DIR
 	}
 
-	// 下载并处理每个字典文件
-	for _, dict := range config.TARGET_DICT {
-		println("正在下载:", dict.Name, "...")
-		if err := downloadAndModify(dict, downloadDir); err != nil {
-			panic(err)
-		}
-	}
-
 	// 收集所有需要的远程仓库
 	remoteRepos := make(map[string]bool)
 
@@ -50,22 +42,42 @@ func main() {
 		}
 	}
 
+	remoteRepoDirs := make(map[string]string)
+	for repoURL := range remoteRepos {
+		repoDir := "temp_remote_repo_" + generateRepoId(repoURL)
+		if err := cloneRemoteRepo(repoURL, repoDir); err != nil {
+			panic(fmt.Errorf("无法克隆远程仓库 %s: %w", repoURL, err))
+		}
+		remoteRepoDirs[repoURL] = repoDir
+		defer os.RemoveAll(repoDir) // 清理临时目录
+	}
+
+	// 下载并处理每个字典文件
+	for _, dict := range config.TARGET_DICT {
+		println("正在下载:", dict.Name, "...")
+
+		var remoteContent []byte
+		if dict.MergeMode == mergeModeKeepRemoteHeader {
+			remotePath, ok := remotePathForDict(config, dict, remoteRepoDirs)
+			if !ok {
+				panic(fmt.Errorf("%s 需要配置 remote_repo 或 REMOTE_REPO", dict.Name))
+			}
+
+			var err error
+			remoteContent, err = os.ReadFile(remotePath)
+			if err != nil {
+				panic(err)
+			}
+		}
+
+		if err := downloadAndModify(dict, downloadDir, remoteContent); err != nil {
+			panic(err)
+		}
+	}
+
 	// 如果有远程仓库配置，则进行比较
 	if len(remoteRepos) > 0 {
 		println("正在检查文件变化...")
-
-		// 克隆所有需要的远程仓库
-		remoteRepoDirs := make(map[string]string)
-		for repoURL := range remoteRepos {
-			repoDir := "temp_remote_repo_" + generateRepoId(repoURL)
-			if err := cloneRemoteRepo(repoURL, repoDir); err != nil {
-				println("警告: 无法克隆远程仓库", repoURL, "，默认进行更新:", err.Error())
-				println("检测到文件变化，需要更新")
-				return
-			}
-			remoteRepoDirs[repoURL] = repoDir
-			defer os.RemoveAll(repoDir) // 清理临时目录
-		}
 
 		// 检查是否有变化
 		hasChanges, err := hasAnyChanges(config, downloadDir, remoteRepoDirs)
