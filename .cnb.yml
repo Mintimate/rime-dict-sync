@@ -90,6 +90,8 @@ main:
       stages:
         - name: 自动同步词库
           script:
+            - go mod tidy
+            - go build .
             - |
               if bash scripts/sync-config.sh configs/rime-ice-english.yaml; then
                 echo "检测到词库变化，需要更新"
@@ -154,6 +156,8 @@ main:
       stages:
         - name: 自动同步词库
           script:
+            - go mod tidy
+            - go build .
             - |
               if bash scripts/sync-config.sh configs/rime-ice-english.yaml; then
                 echo "检测到词库变化，需要更新"
