@@ -37,12 +37,12 @@ func main() {
 
 	// 收集所有需要的远程仓库
 	remoteRepos := make(map[string]bool)
-	
+
 	// 添加全局远程仓库
 	if config.REMOTE_REPO != "" {
 		remoteRepos[config.REMOTE_REPO] = true
 	}
-	
+
 	// 添加字典特定的远程仓库
 	for _, dict := range config.TARGET_DICT {
 		if dict.RemoteRepo != "" {
@@ -53,7 +53,7 @@ func main() {
 	// 如果有远程仓库配置，则进行比较
 	if len(remoteRepos) > 0 {
 		println("正在检查文件变化...")
-		
+
 		// 克隆所有需要的远程仓库
 		remoteRepoDirs := make(map[string]string)
 		for repoURL := range remoteRepos {
@@ -98,7 +98,7 @@ func cloneRemoteRepo(repoURL, targetDir string) error {
 	}
 
 	// 克隆仓库
-	cmd := exec.Command("git", "clone", repoURL, targetDir)
+	cmd := exec.Command("git", "clone", "--depth", "1", repoURL, targetDir)
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	return cmd.Run()

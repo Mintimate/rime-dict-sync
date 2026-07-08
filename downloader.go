@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"io"
 	"net/http"
 	"os"
@@ -11,11 +12,16 @@ import (
 
 // 下载字典文件
 func downloadDict(url string) ([]byte, error) {
-	resp, err := http.Get(url)
+	client := http.Client{Timeout: 30 * time.Second}
+	resp, err := client.Get(url)
 	if err != nil {
 		return nil, err
 	}
 	defer resp.Body.Close()
+
+	if resp.StatusCode < http.StatusOK || resp.StatusCode >= http.StatusMultipleChoices {
+		return nil, fmt.Errorf("download %s failed: %s", url, resp.Status)
+	}
 
 	content, err := io.ReadAll(resp.Body)
 	if err != nil {
@@ -52,7 +58,7 @@ func modifyDictContent(content []byte, dictName string) ([]byte, error) {
 		}
 	}
 
-	modifiedHeader := ""
+	var modifiedHeader strings.Builder
 	foundName := false
 	foundVersion := false
 
@@ -69,10 +75,11 @@ func modifyDictContent(content []byte, dictName string) ([]byte, error) {
 			foundVersion = true
 		}
 
-		modifiedHeader += line + "\n"
+		modifiedHeader.WriteString(line)
+		modifiedHeader.WriteByte('\n')
 	}
 
-	return []byte(modifiedHeader + contentStr[endPos:]), nil
+	return []byte(modifiedHeader.String() + contentStr[endPos:]), nil
 }
 
 func downloadAndModify(dict struct {
@@ -94,10 +101,8 @@ func downloadAndModify(dict struct {
 	}
 
 	// 创建下载目录（如果不存在）
-	if _, err := os.Stat(downloadDir); os.IsNotExist(err) {
-		if err := os.Mkdir(downloadDir, 0755); err != nil {
-			return err
-		}
+	if err := os.MkdirAll(downloadDir, 0755); err != nil {
+		return err
 	}
 
 	// 保存文件
