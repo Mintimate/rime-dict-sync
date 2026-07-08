@@ -53,7 +53,7 @@ main:
                 echo "检测到词库变化，需要更新"
               else
                 echo "词库无变化，跳过更新"
-                exit 0
+                exit 78
               fi
         - <<: *common_git_steps
         - name: 推送代码
@@ -86,6 +86,70 @@ main:
             - git push
   "crontab: 30 10 8 * *":
     - name: "定时同步雾凇英文"
+      <<: *common_sync
+      stages:
+        - name: 自动同步词库
+          script:
+            - |
+              if bash syncRimeIceEnglish.sh; then
+                echo "检测到词库变化，需要更新"
+              else
+                echo "词库无变化，跳过更新"
+                exit 78
+              fi
+        - <<: *common_git_steps
+        - name: 推送代码
+          script:
+            - cp dl_dicts/* oh-my-rime/dicts/
+            - cd oh-my-rime && git add .
+            - 'git commit -m "AutoUpdate Rime Ice English Dicts" -m "" -m "Co-authored-by: iDvel <1469815+iDvel@users.noreply.github.com>"'
+            - git push
+  web_trigger_sync_wanxiang:
+    - name: "手动同步万象"
+      <<: *common_sync
+      stages:
+        - name: 自动同步词库
+          script:
+            - go mod tidy
+            - go build .
+            - |
+              if bash syncWanxiang.sh; then
+                echo "检测到词库变化，需要更新"
+              else
+                echo "词库无变化，跳过更新"
+                exit 78
+              fi
+        - <<: *common_git_steps
+        - name: 推送代码
+          script:
+            - cp dl_dicts/* oh-my-rime/dicts/
+            - cd oh-my-rime && git add .
+            - 'git commit -m "AutoUpdate Wanxiang pinyin Dicts" -m "" -m "Co-authored-by: amzxyz <129564993+amzxyz@users.noreply.github.com>"'
+            - git push
+  web_trigger_sync_radical:
+    - name: "手动同步拆字"
+      <<: *common_sync
+      stages:
+        - name: 自动同步词库
+          script:
+            - go mod tidy
+            - go build .
+            - |
+              if bash syncRadical.sh; then
+                echo "检测到词库变化，需要更新"
+              else
+                echo "词库无变化，跳过更新"
+                exit 78
+              fi
+        - <<: *common_git_steps
+        - name: 推送代码
+          script:
+            - cp dl_dicts/* oh-my-rime/
+            - cd oh-my-rime && git add .
+            - 'git commit -m "AutoUpdate Radical pinyin Dicts" -m "" -m "Co-authored-by: mirtlecn <76689045+mirtlecn@users.noreply.github.com>"'
+            - git push
+  web_trigger_sync_rime_ice_english:
+    - name: "手动同步雾凇英文"
       <<: *common_sync
       stages:
         - name: 自动同步词库
