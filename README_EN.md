@@ -35,13 +35,17 @@ Regular `.dict.yaml` dictionaries use `configs/*.yaml` files with the following 
 DOWNLOAD_DIR: "dl_dicts"
 TARGET_DICT:
   - name: "rime_mint.base.dict.yaml"
-    url: "https://raw.githubusercontent.com/amzxyz/rime_wanxiang/refs/heads/wanxiang/zh_dicts/base.dict.yaml"
+    url: "https://raw.githubusercontent.com/amzxyz/rime_wanxiang/refs/heads/wanxiang/dicts/jichu.dict.yaml"
   - name: "rime_mint.chars.dict.yaml"
-    url: "https://raw.githubusercontent.com/amzxyz/rime_wanxiang/refs/heads/wanxiang/zh_dicts/chars.dict.yaml"
+    url: "https://raw.githubusercontent.com/amzxyz/rime_wanxiang/refs/heads/wanxiang/dicts/zi.dict.yaml"
   - name: "rime_mint.correlation.dict.yaml"
-    url: "https://raw.githubusercontent.com/amzxyz/rime_wanxiang/refs/heads/wanxiang/zh_dicts/correlation.dict.yaml"
+    url: "https://raw.githubusercontent.com/amzxyz/rime_wanxiang/refs/heads/wanxiang/dicts/cuoyin.dict.yaml"
   - name: "rime_mint.ext.dict.yaml"
-    url: "https://raw.githubusercontent.com/amzxyz/rime_wanxiang/refs/heads/wanxiang/zh_dicts/suggestion.dict.yaml"
+    url: "https://raw.githubusercontent.com/amzxyz/rime_wanxiang/refs/heads/wanxiang/dicts/lianxiang.dict.yaml"
+  - name: "rime_mint.compatible.dict.yaml"
+    url: "https://raw.githubusercontent.com/amzxyz/rime_wanxiang/refs/heads/wanxiang/dicts/duoyin.dict.yaml"
+  - name: "rime_mint.places.dict.yaml"
+    url: "https://raw.githubusercontent.com/amzxyz/rime_wanxiang/refs/heads/wanxiang/dicts/diming.dict.yaml"
 ```
 
 ## Example Output
