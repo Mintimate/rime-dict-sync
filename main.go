@@ -15,10 +15,22 @@ func main() {
 	flag.StringVar(&configPath, "config", "config.yaml", "配置文件路径")
 	flag.Parse()
 
+	hasChanges, err := run(configPath)
+	if err != nil {
+		fmt.Fprintln(os.Stderr, "同步失败:", err)
+		os.Exit(2)
+	}
+	if !hasChanges {
+		os.Exit(1)
+	}
+}
+
+// 返回有无变化；错误使用独立退出码，避免 CI 把下载失败当作无变化。
+func run(configPath string) (bool, error) {
 	// 加载配置
 	config, err := loadConfig(configPath)
 	if err != nil {
-		panic(err)
+		return false, err
 	}
 
 	// 获取下载目录（默认为"dl_dicts"）
@@ -46,7 +58,7 @@ func main() {
 	for repoURL := range remoteRepos {
 		repoDir := "temp_remote_repo_" + generateRepoId(repoURL)
 		if err := cloneRemoteRepo(repoURL, repoDir); err != nil {
-			panic(fmt.Errorf("无法克隆远程仓库 %s: %w", repoURL, err))
+			return false, fmt.Errorf("无法克隆远程仓库 %s: %w", repoURL, err)
 		}
 		remoteRepoDirs[repoURL] = repoDir
 		defer os.RemoveAll(repoDir) // 清理临时目录
@@ -60,18 +72,18 @@ func main() {
 		if dict.MergeMode == mergeModeKeepRemoteHeader {
 			remotePath, ok := remotePathForDict(config, dict, remoteRepoDirs)
 			if !ok {
-				panic(fmt.Errorf("%s 需要配置 remote_repo 或 REMOTE_REPO", dict.Name))
+				return false, fmt.Errorf("%s 需要配置 remote_repo 或 REMOTE_REPO", dict.Name)
 			}
 
 			var err error
 			remoteContent, err = os.ReadFile(remotePath)
 			if err != nil {
-				panic(err)
+				return false, err
 			}
 		}
 
 		if err := downloadAndModify(dict, downloadDir, remoteContent); err != nil {
-			panic(err)
+			return false, err
 		}
 	}
 
@@ -82,16 +94,17 @@ func main() {
 		// 检查是否有变化
 		hasChanges, err := hasAnyChanges(config, downloadDir, remoteRepoDirs)
 		if err != nil {
-			panic(err)
+			return false, err
 		}
 
 		if !hasChanges {
 			println("所有文件无变化，跳过更新")
-			os.Exit(1) // 返回非零退出码表示无需更新
+			return false, nil
 		}
 
 		println("检测到文件变化，需要更新")
 	}
+	return true, nil
 }
 
 // 生成仓库URL的唯一标识符

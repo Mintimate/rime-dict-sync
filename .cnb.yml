@@ -49,11 +49,17 @@ main:
             - go mod tidy
             - go build .
             - |
+              rm -rf -- dl_dicts || exit 2
               if bash scripts/sync-config.sh configs/wanxiang.yaml; then
                 echo "检测到词库变化，需要更新"
               else
-                echo "词库无变化，跳过更新"
-                exit 78
+                sync_status=$?
+                if [ "${sync_status}" -eq 1 ]; then
+                  echo "词库无变化，跳过更新"
+                  exit 78
+                fi
+                echo "词库同步失败，退出码: ${sync_status}" >&2
+                exit "${sync_status}"
               fi
         - <<: *common_git_steps
         - name: 推送代码
@@ -71,11 +77,17 @@ main:
             - go mod tidy
             - go build .
             - |
+              rm -rf -- dl_dicts || exit 2
               if bash scripts/sync-config.sh configs/radical.yaml; then
                 echo "检测到词库变化，需要更新"
               else
-                echo "词库无变化，跳过更新"
-                exit 78
+                sync_status=$?
+                if [ "${sync_status}" -eq 1 ]; then
+                  echo "词库无变化，跳过更新"
+                  exit 78
+                fi
+                echo "词库同步失败，退出码: ${sync_status}" >&2
+                exit "${sync_status}"
               fi
         - <<: *common_git_steps
         - name: 推送代码
@@ -93,11 +105,17 @@ main:
             - go mod tidy
             - go build .
             - |
+              rm -rf -- dl_dicts || exit 2
               if bash scripts/sync-config.sh configs/rime-ice-english.yaml; then
                 echo "检测到词库变化，需要更新"
               else
-                echo "词库无变化，跳过更新"
-                exit 78
+                sync_status=$?
+                if [ "${sync_status}" -eq 1 ]; then
+                  echo "词库无变化，跳过更新"
+                  exit 78
+                fi
+                echo "词库同步失败，退出码: ${sync_status}" >&2
+                exit "${sync_status}"
               fi
         - <<: *common_git_steps
         - name: 推送代码
@@ -115,11 +133,17 @@ main:
             - go mod tidy
             - go build .
             - |
+              rm -rf -- dl_dicts || exit 2
               if bash scripts/sync-config.sh configs/wanxiang.yaml; then
                 echo "检测到词库变化，需要更新"
               else
-                echo "词库无变化，跳过更新"
-                exit 78
+                sync_status=$?
+                if [ "${sync_status}" -eq 1 ]; then
+                  echo "词库无变化，跳过更新"
+                  exit 78
+                fi
+                echo "词库同步失败，退出码: ${sync_status}" >&2
+                exit "${sync_status}"
               fi
         - <<: *common_git_steps
         - name: 推送代码
@@ -137,11 +161,17 @@ main:
             - go mod tidy
             - go build .
             - |
+              rm -rf -- dl_dicts || exit 2
               if bash scripts/sync-config.sh configs/radical.yaml; then
                 echo "检测到词库变化，需要更新"
               else
-                echo "词库无变化，跳过更新"
-                exit 78
+                sync_status=$?
+                if [ "${sync_status}" -eq 1 ]; then
+                  echo "词库无变化，跳过更新"
+                  exit 78
+                fi
+                echo "词库同步失败，退出码: ${sync_status}" >&2
+                exit "${sync_status}"
               fi
         - <<: *common_git_steps
         - name: 推送代码
@@ -159,11 +189,17 @@ main:
             - go mod tidy
             - go build .
             - |
+              rm -rf -- dl_dicts || exit 2
               if bash scripts/sync-config.sh configs/rime-ice-english.yaml; then
                 echo "检测到词库变化，需要更新"
               else
-                echo "词库无变化，跳过更新"
-                exit 78
+                sync_status=$?
+                if [ "${sync_status}" -eq 1 ]; then
+                  echo "词库无变化，跳过更新"
+                  exit 78
+                fi
+                echo "词库同步失败，退出码: ${sync_status}" >&2
+                exit "${sync_status}"
               fi
         - <<: *common_git_steps
         - name: 推送代码
@@ -181,11 +217,17 @@ main:
             - go mod tidy
             - go build .
             - |
+              rm -rf -- dl_dicts || exit 2
               if bash ${sync_shell}; then
                 echo "检测到词库变化，需要更新"
               else
-                echo "词库无变化，跳过更新"
-                exit 78
+                sync_status=$?
+                if [ "${sync_status}" -eq 1 ]; then
+                  echo "词库无变化，跳过更新"
+                  exit 78
+                fi
+                echo "词库同步失败，退出码: ${sync_status}" >&2
+                exit "${sync_status}"
               fi
         - <<: *common_git_steps
         - name: 推送代码
